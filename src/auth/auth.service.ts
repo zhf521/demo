@@ -1,16 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon2 from 'argon2';
 import { LoginDto } from './dto/login.dto';
-
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   // 依赖注入
   constructor(
-    private jwtService: JwtService,
     private prisma: PrismaService,
+    private jwtService: JwtService,
   ) {}
   // 注册服务
   async register(dto: RegisterDto) {
@@ -21,11 +20,13 @@ export class AuthService {
         password: await argon2.hash(dto.password), // 对密码进行加密
       },
     });
-    // payload 包含了用户的名称和标识（id）
-    const payload = { name: user.name, sub: user.id };
-    // 通过payload生成token
-    let token = await this.jwtService.signAsync(payload);
-    return { token };
+    return {
+      message: '注册成功',
+      user: {
+        id: user.id,
+        username: user.name,
+      },
+    };
   }
   // 登录服务
   async login(dto: LoginDto) {
@@ -39,8 +40,8 @@ export class AuthService {
     }
     // payload 包含了用户的名称和标识（id）
     const payload = { name: user.name, sub: user.id };
-    // 通过payload生成token
-    let token = await this.jwtService.signAsync(payload);
-    return { token };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }
