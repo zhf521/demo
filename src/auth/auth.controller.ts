@@ -1,7 +1,15 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  ValidationPipe,
+  Get,
+  UseGuards,
+} from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -13,5 +21,10 @@ export class AuthController {
   @Post('login')
   async login(@Body(new ValidationPipe()) LoginDto: LoginDto) {
     return this.auth.login(LoginDto);
+  }
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile() {
+    return '成功';
   }
 }
