@@ -39,9 +39,9 @@ export class AuthService {
       throw new BadRequestException('密码错误');
     }
     // payload 包含了用户的名称和标识（id）
-    const payload = { name: user.name, sub: user.id };
+    const payload = { username: user.name, sub: user.id };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: this.jwtService.sign(payload),
     };
   }
 }

@@ -9,7 +9,7 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { AuthGuard } from './auth.guard';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +22,7 @@ export class AuthController {
   async login(@Body(new ValidationPipe()) LoginDto: LoginDto) {
     return this.auth.login(LoginDto);
   }
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile() {
     return '成功';
