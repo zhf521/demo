@@ -8,9 +8,10 @@ import { ArticleModule } from './article/article.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { RolesGuard } from './auth/roles.guard';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, ArticleModule],
+  imports: [AuthModule, PrismaModule, ArticleModule, UploadModule],
   controllers: [AppController],
   providers: [
     AppService,
